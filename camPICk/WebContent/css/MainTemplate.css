@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+@font-face 
+{
+     font-family: 'S-CoreDream-6Bold';
+     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
+     font-weight: normal;
+     font-style: normal;
+}
+
+@media (min-width: 1200px)
+{
+	html, body
+	{
+	    margin: 0;
+    	padding: 0;
+    	height: 100%;
+    }
+}
+
+.mainContainer
+{
+	width: 1080px;
+	display: grid;
+	grid-template-columns: 260px 800px;
+	grid-template-rows: 50px 60px repeat(auto-fill, minmax(0%, auto));
+	grid-gap: 10px;
+	margin: 0 auto;
+	font-family: 'S-CoreDream-6Bold';
+	/* background-color: gray; */
+}
+
+.mainItem
+{
+	/* border: 1px solid; */
+}
+
+.mainItem:nth-child(1) 	/* TopMenu */
+{
+	grid-column: 1 / 3;
+	grid-row: 1 / 2;
+	justify-self: end;
+	align-self: flex-end;
+	grid-gap: 10px;
+	
+}
+
+.mainItem:nth-child(2) /* Logo */ 
+{
+	grid-column: 1 / 2;
+	grid-row: 2 / 3;	
+}
+
+.mainItem:nth-child(3) /* SitemapRight */ 
+{
+	grid-column: 2 / 3;
+	grid-row: 2 / 3;
+}
+
+.mainItem:nth-child(4) /* NavigationBar  */
+{
+	grid-column: 1 / 2;
+	grid-row: 3 / 4;
+	/* align-self: center; */
+}
+
+.mainItem:nth-child(5) /* Content */
+{
+	/* #FFAEC9 */
+	background-color: white;
+	grid-column: 2 / 3;
+	grid-row: 3/ 4;
+}
+
+
+#mainLogo > img
+{ 
+	width: 90%;
+	object-fit: cover; 
+}
+

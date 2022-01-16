@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+*
+{
+	font-size: small;
+}
+
+ul.topmenu
+{
+	list-style-type: none;
+	margin: 0;
+	margin-right: 40px;
+	padding: 0;
+	overflow: hidden;
+}
+
+li.topmenu
+{
+	margin-left: 1.5rem;
+	float: left;
+}
+
+a.topmenu
+{
+	color: black;
+}
+
+a.topmenu:link, a.topmenu:visited
+{
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	height: 30px;
+	font-size: small;
+	color: black;
+}
+
+
+a.topmenu:hover, a.topmenu:active
+{
+	text-decoration: none;
+	color: #FFD700;
+}
+
+

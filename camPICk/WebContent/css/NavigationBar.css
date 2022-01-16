@@ -1,0 +1,121 @@
+@charset "UTF-8";
+
+#leftNav
+{
+	font-size: 9pt;
+	width: 90%;
+	margin: 0 auto;
+}
+
+ul.menu
+{
+	width: 95%;
+	list-style-type : none;
+	overflow: hidden;
+	/* background-color: #73c7b9; */
+	padding: 15px;
+	border-radius: 10px;
+	text-align: center;
+	/* background-color: rgba(69, 129, 142, 0.5); */
+	color: #000;
+	font-weight: bold;
+	/* font-size: 25px; */
+}
+
+li.Menu
+{
+	display: block;
+	color: #000;
+	text-align: center;
+	height: 40px;
+	text-decoration: none;	
+}
+
+.menu li
+{
+	margin: 7px auto;
+}
+
+.Menu a
+{
+	font-weight: normal;
+}
+
+.subMenu
+{
+	display: none;
+	font-size: small;
+	font-weight: bold;
+	color: #000;
+	text-align: center;
+	height: 20%;
+	text-decoration: none;
+	
+}
+
+a.Menu:visited
+{
+	color: #000;
+}
+
+a.Menu:hover, .subMenu:hover, span.Menu:hover
+{
+	color: #FFD700;
+	cursor: pointer;
+}
+
+	
+#navigationBarSearchButton
+{
+	width: 30px;
+	border-radius: 30%;
+	padding-top: 20px;
+}
+
+.naviSearch
+{
+	border-radius : 30px;
+	height: 30px;
+	color: black;
+	font-size: small;
+	border: 1px solid #000;
+	align: center;
+	width: 80%;
+	/* padding-left:15px; */
+	text-align: center;
+	
+}
+
+a:link { text-decoration: none;}
+a:visited { text-decoration: none;}
+
+a:hover
+{
+	cursor: pointer;
+	text-decoration: none;
+} 
+
+
+.SearchBtn
+{ 	
+
+    border: none;
+    outline:none;
+    width: 28px;
+    height: 28px;
+    vertical-align:middle;
+    background-color:transparent;
+	border-style: none;
+	position: relative;
+}
+
+.SearchBtn > svg
+{
+	vertical-align:middle;
+	width: 20px; 
+	height: 20px;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	
+}

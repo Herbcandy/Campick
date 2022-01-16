@@ -1,0 +1,46 @@
+@font-face 
+{
+    font-family: 'OTWelcomeRA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/OTWelcomeRA.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.partnerSitemapItem ul, .partnerSitemapItem li  
+{
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	list-style: none;
+}
+
+.partnerMainMenu >a 
+{
+	text-align: center;
+}
+
+.partnerMainMenu >li 
+{
+	position: relative;
+	height: 25pt;
+	width: 25%;
+	float: left;
+}
+
+.partnerMainMenu >li >a 
+{
+	background-color: #C4C4C4;
+	color: #45818E;
+	text-decoration: none;
+	font-size: 17px;
+	height: 30pt;
+	font-weight: bold;
+	display: block;
+	padding: 6px;
+	border-right: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.partnerMainMenu > li > a:hover 
+{
+	background-color: #FFD03E;
+}

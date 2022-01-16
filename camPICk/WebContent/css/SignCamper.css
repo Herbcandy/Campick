@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+/* ======== 캠퍼 회원가입 ======== */
+.containerC
+{
+	font-size: 14px;
+	display: grid;
+	width: 800px;
+	grid-template-columns: repeat(2, minmax(auto, auto));
+    grid-template-rows: repeat(9, minmax(auto, auto));
+	margin:0 auto;
+	align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.itemC
+{
+	margin:0 auto;
+}
+
+.itemC:nth-last-child(1)
+{
+    margin-top: 40px;
+    margin-bottom: 40px;
+	grid-column: 1 / 3;
+	display: flex;
+}
+
+.containerC > div
+, .itemC > .iC
+{
+	margin: 0;
+}
+
+
+.sel
+{
+	/* border: 1px solid; */
+	margin:0 auto;
+}
+
+.errMsg
+, .nec
+{
+	font-size: x-small;
+	color: red;
+}
+
+.fregister
+{
+	resize: none;
+	padding: 10px;
+	width: 90%;
+	height: 75px;
+	border: 1px solid #d8d9df;
+	font-size: 10px;
+	color: #98989f;
+	line-height: 1.6em;
+	overflow:auto; 
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+button.sign
+, button.cancel
+{
+	width: 150px;
+	height: 50px;
+	border-radius: 20px;
+}
+

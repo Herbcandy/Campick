@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+@media (min-width: 1200px)
+{
+   html, body
+   {
+       margin: 0;
+       padding: 0;
+       height: 100%;
+    }
+}
+
+.PartnerMainTemplate
+{
+   width: 90%;
+   display: grid;
+   grid-template-columns: 1fr 4fr;
+   grid-template-rows: 1fr 1fr auto;
+   grid-gap: 10pt;
+   margin: 0 auto;
+}
+
+
+.partnerMainItem:nth-child(1)    /* TopMenu */
+{
+   grid-column: 1 / 3;
+   grid-row: 1 / 2;
+   justify-self: end;
+   align-self: flex-end; 
+   
+}
+
+.partnerMainItem:nth-child(2) /* Logo */ 
+{
+   grid-column: 1 / 2;
+   grid-row: 2 / 3;   
+}
+
+.partnerMainItem:nth-child(3) /* SitemapRight */ 
+{
+   grid-column: 2 / 3;
+   grid-row: 2 / 3;
+}
+
+.partnerMainItem:nth-child(4) /* 내용 영역 */
+{
+   display: flex;
+   grid-column: 1 / 3;
+   grid-row: 3 / 4;
+   justify-content: center;
+}
+
+#mainLogo > img
+{ 
+	width: 95%;
+	object-fit: cover; 
+}
