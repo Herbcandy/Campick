@@ -25,6 +25,7 @@ import com.campick.dao.ISurveyResultPartnerDAO;
 import com.campick.dto.CampgroundDTO;
 import com.campick.dto.OptionSurvResultDTO;
 import com.campick.dto.PartnerDTO;
+import com.campick.dto.RoomDTO;
 import com.campick.dto.ThemeSurvResultDTO;
 import com.campick.dto.ThemeSurvResultPartnerDTO;
 
@@ -69,9 +70,15 @@ public class PartnerMainController
 		HttpSession session = request.getSession();
 		String numStr = (String)session.getAttribute("num");
 		
+		IPartnerMainDAO dao = sqlSession.getMapper(IPartnerMainDAO.class);
+		String campgroundId = dao.getCampgroundId(numStr);
+		
+		// 캠핑장id session 추가
+		session.setAttribute("campgroundId",campgroundId);
+		
 		IPartnerCampgroundDAO partnerDao = sqlSession.getMapper(IPartnerCampgroundDAO.class);
 		
-		ArrayList<String> numList = partnerDao.partnerCampgroundGet();
+		//ArrayList<String> numList = partnerDao.partnerCampgroundGet();
 		
 		if (session.getAttribute("num")==null)
 		{
@@ -82,15 +89,7 @@ public class PartnerMainController
 			return "redirect:campick.wei";
 		}
 		
-		for(String partnerNum:numList)
-		{
-			if(numStr.equals(partnerNum))
-			{
-				return "/WEB-INF/view/PartnerMainTemplateCampground.jsp";
-			}
-		}
-		
-		return "/WEB-INF/view/MyCampgroundInfoInsert.jsp"; 
+		return "/WEB-INF/view/PartnerMainTemplateCampground.jsp"; 
 	}
 	
 	// 캠핑장관리 템플릿의 메인영역에 include 되는 페이지
@@ -121,7 +120,6 @@ public class PartnerMainController
 		
 		if (count>0)			// 등록된 캠핑장이 있다면... (캠핑장관리 jsp 호출)
 		{
-			
 			opSurvLists = surveyResultDao.getOptionResult(campgroundId);
 			
 			
@@ -162,7 +160,7 @@ public class PartnerMainController
 		} else					// 등록된 캠핑장이 없다면... ( 캠핑장 등록 폼 jsp 호출. 현재 임의)
 		{
 			
-			return "redirect:partnercampick.wei";
+			return "/WEB-INF/view/MyCampgroundInfoInsert.jsp";
 		}
 	}
 	
@@ -210,6 +208,35 @@ public class PartnerMainController
 		return "/WEB-INF/view/PartnerAccountApproval.jsp";
 	}
 	
+
+	
+	@RequestMapping(value = "roominsert.wei", method = RequestMethod.GET)
+	public String roomInfoInsert(HttpServletRequest request, ModelMap model) throws SQLException
+	{
+		HttpSession session = request.getSession();
+		String partnerNum = (String)session.getAttribute("num");
+		String campgroundId = (String)session.getAttribute("campgroundId");
+		
+		IPartnerCampgroundDAO partnerDao = sqlSession.getMapper(IPartnerCampgroundDAO.class);
+		
+		RoomDTO room = new RoomDTO();
+		
+		room.setCampgroundId(campgroundId);
+		room.setRoomTypeNum(Integer.parseInt(request.getParameter("roomTypeNum")));
+		room.setRoomName(request.getParameter("roomName"));
+		room.setBasicNum(Integer.parseInt(request.getParameter("basicNum")));
+		room.setMaxNum(Integer.parseInt(request.getParameter("maxNum")));
+		room.setWeekDayPrice(Integer.parseInt(request.getParameter("weekDayPrice")));
+		room.setWeekEndPrice(Integer.parseInt(request.getParameter("weekEndPrice")));
+		room.setRoomInfo(request.getParameter("roomInfo"));
+		
+		model.addAttribute("roomInfo",partnerDao.roomInsert(room));
+
+		return "redirect:mycampgroundtemplate.wei";
+		
+	}
+	
+
 	// 계정관리메인템플릿에서 승인 후 계정관리페이지(회원정보수정) 이동을 위한 비밀번호 확인 페이지 로드
 	@RequestMapping(value = "checkpartnerpwform.wei", method = RequestMethod.GET)
 	public String toAccountManage(HttpServletRequest request, ModelMap model)
@@ -230,4 +257,5 @@ public class PartnerMainController
 	}
 	
 	
+
 }

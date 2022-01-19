@@ -7,13 +7,9 @@
 	
 	String num = (String)session.getAttribute("num");
 	String account = (String)session.getAttribute("account");
+	
 	String loginId = (String)session.getAttribute("loginId");
 
-	ArrayList<String> numList = new ArrayList<>();
-	numList.add("7");
-	numList.add("6");
-	numList.add("5");
-	
 %>
 <!DOCTYPE html>
 <html>
@@ -40,6 +36,12 @@
 	cursor: pointer;
 }
 
+.btn-warning:focus, .btn-warning.focus, .btn-warning:active, .btn-warning.active
+{
+	background-color: white;
+    border-color: black;
+} 
+
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -59,6 +61,20 @@
 			$("#myCampground").attr("disabled", "disabled");
 			$("#myQnA").attr("disabled", "disabled");
 		}
+		
+		if ((${count} == 0)) 
+		{
+			$("#myBooking").attr("disabled", "disabled");
+			$(".bookingBtn").css("color", "gray");
+		}
+		else // 등록된 캠핑장이 있을 경우에만 예약 관리로 연결
+		{
+			$("#myBooking").click(function()
+			{            
+				$(location).attr("href", "partnerbookingtemplate.wei");
+			});
+		}
+	    
 		
 		$("#myCampground").click(function()
 		{			
@@ -84,28 +100,28 @@
 	<div class="partnerItem" id="mainLogo">
 		<img src="<%=cp%>/img/logo_title2.png" onclick="location.href='campick.wei'" id="logo">
 	</div>
-	<div class="partnerItem">
+	<div class="partnerItem" style="height: 70vh;">
 		<div class="partnerMainButton">
-			<button type="button" id="myAccount" class="btn  btn-warning btn-lg" style="background-color: rgba(255,208,50,0.7)">
-				<img src="img/turtle.png" id="turtleImg" style="width: 200px; height: 250px;"><br><br>
+			<button type="button" id="myAccount" class="btn  btn-warning btn-lg">
+				<img src="img/turtle.png" id="turtleImg" style="width: 150px; height: 150px;"><br><br>
 				<span class="buttonName">계정관리</span>
 			</button>
 		</div>
 		<div class="partnerMainButton">
-			<button type="button" id="myBooking" class="btn  btn-warning btn-lg" style="background-color: rgba(69,129,142,0.7)">
-				<img src="img/turtle.png" id="turtleImg" style="width: 200px; height: 250px;"><br><br>
-				<span class="buttonName">예약관리</span>
+			<button type="button" id="myBooking" class="btn  btn-warning btn-lg">
+				<img src="img/turtle.png" id="turtleImg" style="width: 150px; height: 150px;"><br><br>
+				<span class="buttonName bookingBtn">예약관리</span>
 			</button>
 		</div>
 		<div class="partnerMainButton">
-			<button type="button" id="myCampground" class="btn btn-warning btn-lg" style="background-color: rgba(255,208,50,0.7)">
-				<img src="img/turtle.png" id="turtleImg" style="width: 200px; height: 250px;"><br><br>
+			<button type="button" id="myCampground" class="btn btn-warning btn-lg">
+				<img src="img/turtle.png" id="turtleImg" style="width: 150px; height: 150px;"><br><br>
 				<span class="buttonName">내 캠핑장 관리</span>
 			</button>
 		</div>
 		<div class="partnerMainButton">
-			<button type="button" id="myQnA" class="btn btn-warning btn-lg" style="background-color: rgba(69,129,142,0.7)">
-				<img src="img/turtle.png" id="turtleImg" style="width: 200px; height: 250px;"><br><br>
+			<button type="button" id="myQnA" class="btn btn-warning btn-lg">
+				<img src="img/turtle.png" id="turtleImg" style="width: 150px; height: 150px;"><br><br>
 				<span class="buttonName">고객문의</span>
 			</button>
 		</div>
