@@ -1,10 +1,9 @@
 @charset "UTF-8";
 
-
-	* { font-size: medium;}
 	a { color: black; }
 	.fc-day-sun a { color: red; } 
 	.fc-day-sat a { color: blue; }
+	.fc-day-other { background-color: #eee; }
 	
 	.partnerBookingItem { padding: 30pt; width:800px;}
 	.partnerBookingContainer
@@ -14,8 +13,10 @@
 	    align-items: center;
 	}
 	
+	
 	table { text-align: center; }
 	th { text-align: center; font-size: 14pt; }
+	.partnerBookingItem td { font-size: medium; }
 	.ptBookingRoomName { color: #45818E; }
 	.selectDate { font-size: 14pt; }
 	
@@ -30,6 +31,7 @@
 	
 	.ptStopBtn { background-color: #ffd03e; }
 	.ptCancelBtn { background-color: #ffd1db; }
+	.ptCancelBtn2 { background-color: #c4c4c4; }
 	
 	.ptBookingBtn > button:hover { background-color: #c4c4c4; }
 
