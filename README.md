@@ -28,5 +28,5 @@
 <img width="500" src="https://user-images.githubusercontent.com/89795192/150192241-6e8579d3-f8ae-405a-8f0d-d1c264eb66a4.gif"/>
 
 - 파트너 예약조회
-<img width="500" src="https://user-images.githubusercontent.com/89795192/150193233-14ff17bc-c282-4232-9e41-5d51dc9093d1.png"/>
+<img width="500" src="https://user-images.githubusercontent.com/89795192/150999537-a2f0329a-d434-425e-9819-5febebd094dd.png"/>
 
