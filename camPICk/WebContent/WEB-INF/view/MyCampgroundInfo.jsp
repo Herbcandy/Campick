@@ -463,8 +463,12 @@
 						out += "						가격 정보 : 평일 1박 기준 " + weekdayprice +"원 | ";
 						out += "									 주말 1박 기준 " + weekendprice +"원<br> 설명 : "+info;
 						out += "		</div>";
-						out += "		<div class='item_roomlist'>";
-						out += "			<button type='button' class='roomlistBtn' id='updateBtn' onclick=''>수정</button>";
+						out += "		<div class='item_roomlist' id='button'>";
+						out += " 			<input type=hidden id=roomname value="+roomname+">"
+						out += "			<button type='button' class='roomlistBtn' onclick='roomIdSend(this)' id="
+						out += roomId 
+						out += ">수정</button>";
+						out += " 			<input type=hidden roomTypeName="+roomTypeName+" roomname=" +roomname+ " basicnum="+basicnum+" maxnum="+maxnum +" weekdayprice="+weekdayprice+" weekendprice="+weekendprice+" info="+info+">"
 						out += "			<button type='button' class='roomlistBtn' id='deleteBtn' onclick=''>삭제</button>";
 						out += "		</div>";
 						out += "</div>";
@@ -482,6 +486,45 @@
 		});
 	}
 
+	
+	// 객실 수정창 띄우기
+	function roomIdSend(obj)
+	{
+		//roomUpdate(obj.id)
+		$('#roomIdUpdate').val(obj.id);
+		
+		var roomTypeName = $(obj).next('input').attr('roomTypeName')
+		var roomname = $(obj).next('input').attr('roomname')
+		var basicnum = $(obj).next('input').attr('basicnum')
+		var maxnum = $(obj).next('input').attr('maxnum')
+		var weekdayprice = $(obj).next('input').attr('weekdayprice')
+		var weekendprice = $(obj).next('input').attr('weekendprice')
+		var info = $(obj).next('input').attr('info')
+		
+		
+		if(roomTypeName=="오토캠핑")
+			$('#91').attr('checked', true); 
+		else if(roomTypeName=="글램핑")
+			$('#92').attr('checked', true);
+		else if(roomTypeName=="카라반")
+			$('#93').attr('checked', true);
+		else if(roomTypeName=="차박")
+			$('#94').attr('checked', true); 
+
+			
+		$('#roomNameUpdate').val(roomname)
+		$('#basicNumUpdate').val(basicnum)
+		$('#maxNumUpdate').val(maxnum)
+		$('#weekDayPriceUpdate').val(weekdayprice)
+		$('#weekEndPriceUpdate').val(weekendprice)
+		$('#roomInfoUpdate').val(info)
+		
+		
+		$('#roomUpdateModal').modal('show');
+		
+		
+	}
+	
 
 	/* function roomInsertInfo()
 	{
@@ -598,7 +641,7 @@
 						<td><span style="font-size: 16px;">REVIEW<span class='badge'>${myCampgroundInfo.review }</span></span></td>
 					</tr>
 				</table>
-				<div class="col-md-4" style="text-align: right;"><button type="button" id="myCampgroundUpdate" class="btn0">캠핑장 수정</button></div>
+				<div class="col-md-4" style="text-align: right;"><button type="button" id="myCampgroundUpdate" class="btn0" onclick="location.href='mycampgroundupdatetemplate.wei'">캠핑장 수정</button></div>
 				<%-- <span style="font-size: 30px;">${myCampgroundInfo.campgroundName }</span>
 				<span style="margin-left: 10px; font-size: 16px;">PICK<span class='badge'>${myCampgroundInfo.pick }</span></span>
 				<span style="font-size: 16px;">REVIEW<span class='badge'>${myCampgroundInfo.review }</span></span>
@@ -777,6 +820,72 @@
    </div>
    </form>
 </div><!-- 객실 추가 모달 끝 -->
+
+
+<!-- 객실 수정 정보 넘기기 -->
+<div>
+<form action="roomidforupdate.wei" method="get" id="roomIdForm">
+	<input type="hidden" id="roomIdSend" name="roomId">
+</form>
+</div>
+
+<!-- 객실 수정 모달  -->
+<div class="modal fade" id="roomUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+<form action="roomupdate.wei" method="get" id="roomUpdateForm">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="myModalLabel" style="text-align: center">객실 수정</h3>
+         </div>
+      
+         <div class="modal-body">
+            <!-- 객실수정 폼 -->
+            <div class="roomInsertMain">
+                  <div class="roomInsertItem">유형선택</div>
+                  <input type="hidden" id="roomIdUpdate" name="roomId">
+                  <div class="roomInsertItem">
+                     	<label><input type="radio" name="roomTypeNum" value="91" class="roomTypeNum" id="91">오토캠핑 </label>
+                        <label><input type="radio" name="roomTypeNum" value="92" class="roomTypeNum" id="92">글램핑 </label>
+                        <label><input type="radio" name="roomTypeNum" value="93" class="roomTypeNum" id="93">카라반 </label>
+                        <label><input type="radio" name="roomTypeNum" value="94" class="roomTypeNum" id="94">차박 </label>
+                  </div>
+                  
+                  <div class="roomInsertItem">객실이름</div>
+                  <div class="roomInsertItem"><input type="text" id="roomNameUpdate" name="roomName"></div>
+                  
+                  <div class="roomInsertItem">인원 설정</div>
+                  <div class="roomInsertItem">
+                     기준인원 <input type="number" class="intInsert" id="basicNumUpdate" min="0" step="1" required="required" name="basicNum">명 / 
+                     최대인원 <input type="number" class="intInsert" min="0" step="1" required="required"  id="maxNumUpdate" name="maxNum">명
+                  </div>
+                  <div class="roomInsertItem">사진</div>
+                  <div class="roomInsertItem">
+                     <input type="file">
+                  </div>
+                  <div class="roomInsertItem">가격정보</div>
+                  <div class="roomInsertItem">
+                     주중 가격  <input type="text" placeholder="일~목" class="weekPrice" id="weekDayPriceUpdate" name="weekDayPrice">원 / 
+                     주말 가격  <input type="text" placeholder="금/토" class="weekPrice" id="weekEndPriceUpdate" name="weekEndPrice">원
+                  </div>
+                  <div class="roomInsertItem">추가설명</div>
+                  <div class="roomInsertItem"><textarea rows="5" cols="50" style="resize: none" id="roomInfoUpdate" name="roomInfo"></textarea> </div>
+            </div>
+            
+         </div>
+
+         <div class="modal-footer" style="align-content: center;">
+            <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+            <button type="submit" class="btn btn-primary" id="roomInsertConfirmBtn">확인</button>
+         </div>
+         
+         
+      </div>
+   </div>
+   </form>
+</div><!-- 객실 수정 모달 끝 -->
 
 
 <script type="text/javascript">
