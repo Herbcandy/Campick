@@ -237,8 +237,7 @@ public class BookingDAO implements IBookingDAO
 				+ ", ?" 
 				+ ", ( SELECT MEMBERNUM" 
 				+ " FROM BOOKINGVIEW"
-				+ " WHERE BOOKINGNUM = ?)"
-				+ ", SYSDATE, ?)";
+				+ " WHERE BOOKINGNUM = ?), SYSDATE, ?)";
 		
 		PreparedStatement pstmt = null;
 		
@@ -411,7 +410,7 @@ public class BookingDAO implements IBookingDAO
 		return result; 
 	}
 
-	// 예약 취소 해당 환불 구정 구하기
+	// 예약 취소 해당 환불 규정 구하기
 	@Override
 	public int getRefundPolicy(String bookingNum) throws SQLException
 	{
