@@ -4,11 +4,13 @@
 
 package com.campick.mycontroller;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ import com.campick.dto.PartnerDTO;
 import com.campick.dto.RoomDTO;
 import com.campick.dto.ThemeSurvResultDTO;
 import com.campick.dto.ThemeSurvResultPartnerDTO;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 @Controller
 public class PartnerMainController
@@ -60,9 +64,7 @@ public class PartnerMainController
 	}
 	
 	
-	// 메인에서 『캠핑장 관리』 메뉴 선택 시 캠핑장 유무에 따라 이동
-	// → 있으면... 템플릿있는 상세 페이지
-	// → 없으면... 등록 페이지
+	// 메인에서 『캠핑장 관리』 메뉴 선택 시 이동
 	@RequestMapping(value = "mycampgroundtemplate.wei", method = RequestMethod.GET)
 	public String toMyCampground(HttpServletRequest request, ModelMap model)
 	{
@@ -93,6 +95,7 @@ public class PartnerMainController
 	}
 	
 	// 캠핑장관리 템플릿의 메인영역에 include 되는 페이지
+	// 등록된 캠핑장 유무에 따라 분기
 	@RequestMapping(value = "mycampground.wei", method = RequestMethod.GET)
 	public String toMyCampgroundInfo(HttpServletRequest request, ModelMap model) throws SQLException
 	{
@@ -164,6 +167,116 @@ public class PartnerMainController
 		}
 	}
 	
+	// 캠핑장 관리 에서 캠핑장 수정 클릭 시 수정 폼으로 이동
+	@RequestMapping(value = "mycampgroundupdatetemplate.wei", method = RequestMethod.GET)
+	public String toCampgroundUpdateTemplate(HttpServletRequest request, ModelMap model)
+	{
+		return "/WEB-INF/view/PartnerMainTemplateCampUpdateForm.jsp";
+	}
+	
+	
+	// 캠핑장 수정 템플릿의 메인 영역에 include 되는 페이지
+	// 현재 캠핑장 정보를 가져와 뿌려줘야 함.
+	// 캠핑장명, 입실시간/퇴실시간, 환불규정1/2/3, 주소1/2/3, 대표번호, 추가정보, 편의시설리스트, 즐길거리리스트, 사진
+	@RequestMapping(value = "mycampgroundupdateform.wei", method = RequestMethod.GET)
+	public String toCampgroundUpdateForm(HttpServletRequest request, ModelMap model)
+	{
+		HttpSession session = request.getSession();
+		String partnerNum = (String)session.getAttribute("num");
+		
+		IPartnerCampgroundDAO campgroundDao = sqlSession.getMapper(IPartnerCampgroundDAO.class);
+		
+		CampgroundDTO myCampgroundInfo = new CampgroundDTO();
+		CampgroundDTO guidStandardInfo = new CampgroundDTO();
+		myCampgroundInfo = campgroundDao.getCampgroundInfoForUpdate(partnerNum);
+		guidStandardInfo = campgroundDao.getGuidStandard();
+		
+		// 캠핑장 정보 출력
+		model.addAttribute("myCampgroundInfo", myCampgroundInfo);					// 캠핑장 정보(환불규정 포함)
+		model.addAttribute("comfortsList", campgroundDao.comfortsListForUpdate(partnerNum));	// 편의시설
+		model.addAttribute("funList", campgroundDao.funListForUpdate(partnerNum));			// 즐길거리
+		model.addAttribute("guidStandardInfo", guidStandardInfo);
+		
+		return "/WEB-INF/view/MyCampgroundInfoUpdate.jsp";
+	}
+	
+	@RequestMapping(value = "mycampgroundupdate.wei", method = RequestMethod.POST)
+	public String updateCampgroundInfo(HttpServletRequest request, ModelMap model)
+	{
+		IPartnerCampgroundDAO campgroundDao = sqlSession.getMapper(IPartnerCampgroundDAO.class);
+		CampgroundDTO campground = new CampgroundDTO();
+		String comfortsStr = "";
+		String funStr = "";
+				
+		String root = request.getSession().getServletContext().getRealPath("/");
+		//System.out.println(root);
+		//C:\FinalCampick\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\camPICk\
+		String fileRoute = root + "saveFile" + File.separator + "licenseFiles";	
+		File dir = new File(fileRoute);
+		
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		String encType = "UTF-8";					//-- 인코딩 방식
+		int maxFileSize = 10*1024*1024;
+		
+		try
+		{
+			// 옵션 제외 캠핑장 정보 수정
+			MultipartRequest multi = null;
+			multi = new MultipartRequest(request, fileRoute, maxFileSize, encType, new DefaultFileRenamePolicy());
+			String fileName = multi.getFilesystemName("partnerSignFile");
+			campground.setCampgroundId(multi.getParameter("campgroundId"));
+			campground.setCampgroundName(multi.getParameter("campgroundName"));
+			campground.setAddress1(multi.getParameter("address1"));
+			campground.setAddress2(multi.getParameter("address2"));
+			campground.setAddress3(multi.getParameter("address3"));
+			campground.setTel(multi.getParameter("tel"));
+			campground.setExtraInfo(multi.getParameter("extraInfo"));
+			campground.setCheckInDate(multi.getParameter("checkInDate"));
+			campground.setCheckOutDate(multi.getParameter("checkOutDate"));
+			campground.setFileRoute(fileRoute);
+			campground.setFileName(fileName);
+			campground.setPolicyStandard1(Integer.parseInt(multi.getParameter("policyStandard1")));
+			campground.setPolicyStandard2(Integer.parseInt(multi.getParameter("policyStandard2")));
+			campground.setPolicyStandard3(Integer.parseInt(multi.getParameter("policyStandard3")));
+			
+			campgroundDao.modifyCampground(campground);
+			
+			// 옵션 현황 정보 수정
+			// 현재 옵션 삭제
+			campgroundDao.removeOptionStatus(multi.getParameter("campgroundId"));
+			
+			// 선택한 옵션 insert 
+			comfortsStr = multi.getParameter("comfortsList");
+			funStr = multi.getParameter("funList");
+			String[] comfortsList = comfortsStr.split(",");
+			for (int i = 0; i < comfortsList.length; i++)
+			{
+				campgroundDao.addOptionStatus(multi.getParameter("campgroundId"), comfortsList[i]);
+				//System.out.println(comfortsList[i]);
+			}
+			String[] funList = funStr.split(",");
+			for (int i = 0; i < funList.length; i++)
+			{
+				campgroundDao.addOptionStatus(multi.getParameter("campgroundId"), funList[i]);
+				//System.out.println(funList[i]);
+			}
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return "redirect:mycampgroundtemplate.wei";
+	}
+	
+	
+	
+	
+	
+	//----------------------------------- 계정 관련 -----------------------------
+	
 	// 계정관리 메뉴 클릭 시 계정관리메인템플릿으로 이동
 	@RequestMapping(value = "partneraccounttemplate.wei", method = RequestMethod.GET)
 	public String toAccount(HttpServletRequest request)
@@ -209,7 +322,7 @@ public class PartnerMainController
 	}
 	
 
-	
+	// 객실 추가 후 캠핑장 관리 페이지로 이동
 	@RequestMapping(value = "roominsert.wei", method = RequestMethod.GET)
 	public String roomInfoInsert(HttpServletRequest request, ModelMap model) throws SQLException
 	{
@@ -231,6 +344,19 @@ public class PartnerMainController
 		room.setRoomInfo(request.getParameter("roomInfo"));
 		
 		model.addAttribute("roomInfo",partnerDao.roomInsert(room));
+
+		return "redirect:mycampgroundtemplate.wei";
+		
+	}
+	
+	
+	// 객실 수정 후 캠핑장 관리 페이지로 이동
+	@RequestMapping(value = "roomupdate.wei", method = RequestMethod.GET)
+	public String roomInfoUpdate(HttpServletRequest request, ModelMap model,RoomDTO room) throws SQLException
+	{
+		IPartnerCampgroundDAO partnerDao = sqlSession.getMapper(IPartnerCampgroundDAO.class);
+		
+		model.addAttribute("room",partnerDao.roomUpdate(room));
 
 		return "redirect:mycampgroundtemplate.wei";
 		
