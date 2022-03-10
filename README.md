@@ -16,7 +16,7 @@
 > JavaScript, JQuery, Ajax, Spring, MyBatis<br>
 > Tomcat, AWS<br>
 > <br>
-> Open Source - FullCalendar<br>
+> Open Source - FullCalendar, Chart.js<br>
 
 <br>
 
